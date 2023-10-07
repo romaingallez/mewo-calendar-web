@@ -6,6 +6,7 @@ require (
 	github.com/go-rod/rod v0.114.3
 	github.com/gofiber/fiber/v2 v2.49.2
 	github.com/gofiber/template/html/v2 v2.0.5
+	github.com/goodsign/monday v1.0.1
 	github.com/joho/godotenv v1.5.1
 	github.com/ysmood/gson v0.7.3
 )

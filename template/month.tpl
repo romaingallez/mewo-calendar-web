@@ -84,29 +84,32 @@
 </script>
 <div class="container mx-auto mt-10">
   <div class="wrapper bg-white rounded shadow w-full">
-    <div class="header justify-between p-2">
-      <span class="font-bold text-lg"></span>
-      <button
-        id="change"
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        onclick="changeFormation()"
-      >
-        Change to {{ .InvertFormation }}
-      </button>
-
-      <div class="buttons float-right">
+    <div class="header flex justify-between border-b p-2">
+      <div>
+        <span class="text-lg font-bold">{{ .Formation }} {{ .Year }} {{ .Month.MonthName }} </span>
         <button id="previous" class="p-1" onclick="changeMonth('previous')">
-          <!-- SVG content for left arrow -->
+          <svg width="1em" fill="gray" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-left-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+            <path fill-rule="evenodd" d="M8.354 11.354a.5.5 0 0 0 0-.708L5.707 8l2.647-2.646a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708 0z" />
+            <path fill-rule="evenodd" d="M11.5 8a.5.5 0 0 0-.5-.5H6a.5.5 0 0 0 0 1h5a.5.5 0 0 0 .5-.5z" />
+          </svg>
         </button>
         <button id="next" class="p-1" onclick="changeMonth('next')">
-          <!-- SVG content for right arrow -->
+          <svg width="1em" fill="gray" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+            <path fill-rule="evenodd" d="M7.646 11.354a.5.5 0 0 1 0-.708L10.293 8 7.646 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0z" />
+            <path fill-rule="evenodd" d="M4.5 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5z" />
+          </svg>
         </button>
       </div>
-
-      <div class="relative max-w-sm">
-        <div
-          class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
-        ></div>
+      <div class="flex flex-col items-center">
+        <button
+          id="changeFormation"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+          onclick="changeFormation()"
+        >
+          Changer la formation en {{ .InvertFormation }}
+        </button>
       </div>
     </div>
 
@@ -126,7 +129,7 @@
           <th
             class="text-gray-600 font-normal text-sm py-2 px-2 border-b border-gray-200"
           >
-            {{ .DayName }} {{ .DayDate.Day }} {{ .DayDate.Month }} {{ .DayDate.Year }}
+            {{ .DayName }}
           </th> 
           {{ end }}
         </tr>

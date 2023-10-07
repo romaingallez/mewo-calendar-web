@@ -2,6 +2,33 @@ package models
 
 import "time"
 
+// Write a map of English month to french month
+var FrenchMonthMap = map[string]string{
+	"January":   "Janvier",
+	"February":  "Février",
+	"March":     "Mars",
+	"April":     "Avril",
+	"May":       "Mai",
+	"June":      "Juin",
+	"July":      "Juillet",
+	"August":    "Août",
+	"September": "Septembre",
+	"October":   "Octobre",
+	"November":  "Novembre",
+	"December":  "Décembre",
+}
+
+// Write a map of English day to french day
+var FrenchDayMap = map[string]string{
+	"Monday":    "Lundi",
+	"Tuesday":   "Mardi",
+	"Wednesday": "Mercredi",
+	"Thursday":  "Jeudi",
+	"Friday":    "Vendredi",
+	"Saturday":  "Samedi",
+	"Sunday":    "Dimanche",
+}
+
 type CalScform []CALSCFORMElement
 
 type CALSCFORMElement struct {

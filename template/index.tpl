@@ -1,5 +1,5 @@
 <div class="flex flex-col justify-center items-center h-screen bg-slate-900 bg-opacity-90 shadow-xl rounded-lg p-8">
-    <h1 class="text-3xl text-white font-bold">Voir le calandrier mewo</h1>
+    <h1 class="text-3xl text-white font-bold">Voir le calendrier mewo</h1>
 
     <p class="text-white text-lg mt-4"></p>
 

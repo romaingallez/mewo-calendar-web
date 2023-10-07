@@ -13,33 +13,43 @@ import (
 )
 
 func MergeEventsByDay(events []models.CALSCFORMElement) []models.CALSCFORMElement {
-	// Group by day
-	groupedEvents := make(map[string][]models.CALSCFORMElement)
+	// Group by day and summary
+	groupedEvents := make(map[string]map[string][]models.CALSCFORMElement)
+
 	for _, event := range events {
 		date, err := time.Parse("20060102T150405Z", event.Dtstart)
 		if err != nil {
 			log.Println(err)
 			continue
 		}
-		dayKey := date.Format("2006-01-02")
-		groupedEvents[dayKey] = append(groupedEvents[dayKey], event)
-	}
 
-	// Merge events for each day
-	var mergedEvents []models.CALSCFORMElement
-	for _, dayEvents := range groupedEvents {
-		if len(dayEvents) == 0 {
-			continue
+		dayKey := date.Format("2006-01-02")
+		summaryKey := event.Summary
+
+		if _, ok := groupedEvents[dayKey]; !ok {
+			groupedEvents[dayKey] = make(map[string][]models.CALSCFORMElement)
 		}
 
-		// Sort events by start time within the day
-		sort.Slice(dayEvents, func(i, j int) bool {
-			return dayEvents[i].Dtstart < dayEvents[j].Dtstart
-		})
+		groupedEvents[dayKey][summaryKey] = append(groupedEvents[dayKey][summaryKey], event)
+	}
 
-		mergedEvent := dayEvents[0]
-		mergedEvent.Dtend = dayEvents[len(dayEvents)-1].Dtend
-		mergedEvents = append(mergedEvents, mergedEvent)
+	// Merge events for each day and summary
+	var mergedEvents []models.CALSCFORMElement
+	for _, dayEventsMap := range groupedEvents {
+		for _, summaryEvents := range dayEventsMap {
+			if len(summaryEvents) == 0 {
+				continue
+			}
+
+			// Sort events by start time within the day
+			sort.Slice(summaryEvents, func(i, j int) bool {
+				return summaryEvents[i].Dtstart < summaryEvents[j].Dtstart
+			})
+
+			mergedEvent := summaryEvents[0]
+			mergedEvent.Dtend = summaryEvents[len(summaryEvents)-1].Dtend
+			mergedEvents = append(mergedEvents, mergedEvent)
+		}
 	}
 
 	return mergedEvents
@@ -106,7 +116,7 @@ func GetIcal(formation string) ([]models.CALSCFORMElement, error) {
 
 	// loop over ical events if event is the same date as the previous one, add it to the same event
 	// disabled for now as there is event on the same day but different on the morning and afternoon
-	// CalendarEvents = MergeEventsByDay(CalendarEvents)
+	CalendarEvents = MergeEventsByDay(CalendarEvents)
 
 	// log.Println(len(CalendarEvents))
 

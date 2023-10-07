@@ -5,6 +5,7 @@ import (
 	"calendar/internals/models"
 	"fmt"
 	"log"
+	"strings"
 	"time"
 
 	_ "time/tzdata"
@@ -53,15 +54,24 @@ func GetHandleMonth(c *fiber.Ctx) (err error) {
 	// return c.SendString("ok")
 	MonthM := models.Month{
 		MonthNumber: int(MonthTime.Month()),
-		MonthName:   MonthTime.Month().String(),
+		MonthName:   models.FrenchMonthMap[MonthTime.Month().String()],
 		MonthYear:   MonthTime.Year(),
 		Weeks:       Weeks,
 		// generate a week struct for each week in the month
 	}
 
+	// Convert a letter from lower case to upper case
+	formationFirstLetter := strings.ToUpper(string(formation[0]))
+	// get the rest of the string
+	formationRest := formation[1:]
+	// add the first letter to the rest of the string
+	formationFirstLetterUpper := formationFirstLetter + formationRest
+
 	RenderMap := fiber.Map{
 		"InvertFormation": invertFormation[formation],
 		"Month":           MonthM,
+		"Year":            year,
+		"Formation":       formationFirstLetterUpper,
 	}
 
 	//
@@ -108,6 +118,7 @@ func GenerateWeek(year int, month int, formation string) (Weeks []models.Week) {
 			dayNumber := firstDayOfWeek.AddDate(0, 0, j).Day()
 			// get the day name
 			dayName := firstDayOfWeek.AddDate(0, 0, j).Weekday().String()
+			// d := monday
 			// get the day date
 			dayDate := firstDayOfWeek.AddDate(0, 0, j)
 			// get the day events
@@ -169,10 +180,12 @@ func GenerateWeek(year int, month int, formation string) (Weeks []models.Week) {
 				}
 			}
 
+			fullDayName := fmt.Sprintf("%s %d %s %d", models.FrenchDayMap[dayName], dayNumber, models.FrenchMonthMap[time.Month(month).String()], year)
+
 			// generate a day struct for each day in the week
 			Days = append(Days, models.Day{
 				DayNumber: dayNumber,
-				DayName:   dayName,
+				DayName:   fullDayName,
 				DayDate:   dayDate,
 				DayEvents: dayEvents,
 			})

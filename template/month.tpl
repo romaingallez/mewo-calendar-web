@@ -86,7 +86,7 @@
   <div class="wrapper bg-white rounded shadow w-full">
     <div class="header flex justify-between border-b p-2">
       <div>
-        <span class="text-lg font-bold">{{ .Formation }} {{ .Year }} {{ .Month.MonthName }} </span>
+        <span class="text-lg font-bold">Calendrier {{ .Formation }} pour {{ .Month.MonthName }} {{ .Year }}  </span>
         <button id="previous" class="p-1" onclick="changeMonth('previous')">
           <svg width="1em" fill="gray" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-left-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />

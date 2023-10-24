@@ -100,6 +100,8 @@ func GenerateWeek(year int, month int, formation string) (Weeks []models.Week) {
 		log.Println(err)
 	}
 
+	log.Printf("number of weeks: %d", weeks)
+
 	// generate a week struct for each week in the month
 	for i := 0; i < weeks; i++ {
 		// Generate all the days in the week
@@ -110,21 +112,28 @@ func GenerateWeek(year int, month int, formation string) (Weeks []models.Week) {
 		// get the number of days in the week for a (monday to friday)
 		days := int(lastDayOfWeek.Sub(firstDayOfWeek).Hours()/24) + 1
 
+		// log.Printf("first day of the week: %s\n last day of the week %s\n days: %d", firstDayOfWeek, lastDayOfWeek, days)
+
 		// days := 5
-		var Days []models.Day
+		// var Days []models.Day
+		Days := make([]models.Day, 0, days)
 		// generate a day struct for each day in the week
 		for j := 0; j < days; j++ {
+			var EmptyDay = false
 			// get the day number
-			dayNumber := firstDayOfWeek.AddDate(0, 0, j).Day()
-			// get the day name
-			dayName := firstDayOfWeek.AddDate(0, 0, j).Weekday().String()
-			// d := monday
-			// get the day date
-			dayDate := firstDayOfWeek.AddDate(0, 0, j)
-			// get the day events
+			currentDay := firstDayOfWeek.AddDate(0, 0, j)
+			if currentDay.Month() != firstDay.Month() {
+				// If the current day is not in the same month as the first day, set to an empty time.Time
+				log.Println("not in the same month")
+				// EmptyDay = true
 
-			// If the day is a Saturday or Sunday, skip
-			if dayDate.Weekday() == time.Saturday || dayDate.Weekday() == time.Sunday {
+			}
+			dayNumber := currentDay.Day()
+			// get the day name
+			dayName := currentDay.Weekday().String()
+
+			// If the day is a Saturday or Sunday or an empty time, skip
+			if currentDay.IsZero() || currentDay.Weekday() == time.Saturday || currentDay.Weekday() == time.Sunday {
 				continue
 			}
 
@@ -137,15 +146,7 @@ func GenerateWeek(year int, month int, formation string) (Weeks []models.Week) {
 
 			// loop over all the events in the calendar test if it is in the day
 			for _, event := range calendarEvents {
-				// get the event date
-				// DtStart, err := time.ParseInLocation("20060102T150405Z", event.Dtstart, ParisLocation)
-				// if err != nil {
-				// 	log.Println(err)
-				// }
-				// DtEnd, err := time.ParseInLocation("20060102T150405Z", event.Dtend, ParisLocation)
-				// if err != nil {
-				// 	log.Println(err)
-				// }
+
 				DtStart, err := time.Parse("20060102T150405Z", event.Dtstart)
 				if err != nil {
 					log.Println(err)
@@ -156,10 +157,13 @@ func GenerateWeek(year int, month int, formation string) (Weeks []models.Week) {
 					log.Println(err)
 				}
 
+				// print dtStart with format day month year
+				// fmt.Println(DtStart.Format("02/01/2006 15:04:05"))
+
 				// log.Println(DtStart)
 				// check if the event date is the same as the day date
 				// test if the event day is the same as the day day and if the event month is the same as the day month and if the event year is the same as the day year
-				if DtStart.Day() == dayDate.Day() && DtStart.Month() == dayDate.Month() && DtStart.Year() == dayDate.Year() {
+				if DtStart.Day() == currentDay.Day() && DtStart.Month() == currentDay.Month() && DtStart.Year() == currentDay.Year() {
 					// log.Println(DtStart.Format("15:04"), DtEnd.Format("15:04"))
 
 					// convert DtStart to a time in paris timezone
@@ -180,14 +184,16 @@ func GenerateWeek(year int, month int, formation string) (Weeks []models.Week) {
 				}
 			}
 
-			fullDayName := fmt.Sprintf("%s %d %s %d", models.FrenchDayMap[dayName], dayNumber, models.FrenchMonthMap[time.Month(month).String()], year)
+			fullDayName := fmt.Sprintf("%s %d %s %d", models.FrenchDayMap[dayName], dayNumber, models.FrenchMonthMap[time.Month(currentDay.Month()).String()], year)
+			log.Println(fullDayName)
 
 			// generate a day struct for each day in the week
 			Days = append(Days, models.Day{
 				DayNumber: dayNumber,
 				DayName:   fullDayName,
-				DayDate:   dayDate,
+				DayDate:   currentDay,
 				DayEvents: dayEvents,
+				Empty:     EmptyDay,
 			})
 		}
 
@@ -196,6 +202,8 @@ func GenerateWeek(year int, month int, formation string) (Weeks []models.Week) {
 			Days:       Days,
 		})
 	}
+
+	// print the last week day with each day
 
 	return Weeks
 }

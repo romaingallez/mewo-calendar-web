@@ -66,6 +66,7 @@ type Day struct {
 	DayName   string
 	DayDate   time.Time
 	DayEvents []Event
+	Empty     bool
 }
 
 // Create an event struct to store the event data

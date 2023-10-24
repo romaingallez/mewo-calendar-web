@@ -129,8 +129,13 @@
           <th
             class="text-gray-600 font-normal text-sm py-2 px-2 border-b border-gray-200"
           >
+            {{ if .Empty }}
+            <!-- If the day is empty, display nothing in the header -->
+            &nbsp;
+            {{ else }}
             {{ .DayName }}
-          </th> 
+            {{ end }}
+          </th>
           {{ end }}
         </tr>
       </thead>

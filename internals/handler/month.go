@@ -28,6 +28,8 @@ func GetHandleMonth(c *fiber.Ctx) (err error) {
 
 	formation := c.Query("formation", "dev")
 
+	currentDay := time.Now().In(ParisLocation)
+
 	currentYear := time.Now().In(ParisLocation).Year()
 	currentMonth := time.Now().In(ParisLocation).Month()
 
@@ -40,7 +42,7 @@ func GetHandleMonth(c *fiber.Ctx) (err error) {
 		return c.Redirect(fmt.Sprintf("/month?formation=%s&year=%d&month=%d", formation, currentYear, int(currentMonth)))
 	}
 
-	log.Println(formation, year, month)
+	// log.Println(formation, year, month)
 
 	// Create a month time.Time from year and month number
 	MonthTime, err := time.Parse("2006-01", fmt.Sprintf("%s-%s", year, month))
@@ -70,6 +72,7 @@ func GetHandleMonth(c *fiber.Ctx) (err error) {
 	RenderMap := fiber.Map{
 		"InvertFormation": invertFormation[formation],
 		"Month":           MonthM,
+		"CurrentDay":      currentDay,
 		"Year":            year,
 		"Formation":       formationFirstLetterUpper,
 	}
@@ -100,7 +103,7 @@ func GenerateWeek(year int, month int, formation string) (Weeks []models.Week) {
 		log.Println(err)
 	}
 
-	log.Printf("number of weeks: %d", weeks)
+	// log.Printf("number of weeks: %d", weeks)
 
 	// generate a week struct for each week in the month
 	for i := 0; i < weeks; i++ {
@@ -124,7 +127,7 @@ func GenerateWeek(year int, month int, formation string) (Weeks []models.Week) {
 			currentDay := firstDayOfWeek.AddDate(0, 0, j)
 			if currentDay.Month() != firstDay.Month() {
 				// If the current day is not in the same month as the first day, set to an empty time.Time
-				log.Println("not in the same month")
+				// log.Println("not in the same month")
 				// EmptyDay = true
 
 			}
@@ -185,7 +188,7 @@ func GenerateWeek(year int, month int, formation string) (Weeks []models.Week) {
 			}
 
 			fullDayName := fmt.Sprintf("%s %d %s %d", models.FrenchDayMap[dayName], dayNumber, models.FrenchMonthMap[time.Month(currentDay.Month()).String()], year)
-			log.Println(fullDayName)
+			// log.Println(fullDayName)
 
 			// generate a day struct for each day in the week
 			Days = append(Days, models.Day{

@@ -113,6 +113,9 @@
       </div>
     </div>
 
+    {{$CurrentDay := .CurrentDay}}
+
+
     {{ range .Month.Weeks }}
     {{ $hasEvents := false }}
     {{ range .Days }}
@@ -141,21 +144,44 @@
       </thead>
       <tbody>
         <tr>
-          {{ range $day := .Days }}
+          {{ range $day := .Days }}  
+          {{ if and (eq $day.DayDate.Year $CurrentDay.Year) (eq $day.DayDate.Month $CurrentDay.Month) (eq $day.DayDate.Day $CurrentDay.Day) }}
+                  <!-- Code when the date part of $day.DayDate is equal to the date part of $CurrentDay -->
+                  <!-- For demonstration: -->
           <td
-            class="p-1 border cursor-pointer duration-500 ease h-40 hover:bg-gray-300 lg:w-30 md:w-30 overflow-auto sm:w-20 transition w-10 xl:w-40"
+              class="p-1 border cursor-pointer duration-500 ease h-40 lg:w-30 md:w-30 bg-gray-300 overflow-auto sm:w-20 transition w-10 xl:w-40"
           >
-            {{ range $event := $day.DayEvents }}
-            <div
-              class="event bg-purple-400 text-white rounded p-1 text-sm mb-1"
-            >
-              <span class="event-name">{{ $event.EventName }}</span>
-              <br>
-              <span class="time">{{  $event.EventStart.Format "15:04" }}</span> <span class="time"> {{ $event.EventEnd.Format "15:04" }}</span>
-            </div>
-            {{ end }}
+              
+              
+              {{ range $event := $day.DayEvents }}
+                  <div
+                      class="event bg-purple-400 text-white rounded p-1 text-sm mb-1"
+                  >
+                      <span class="event-name">{{ $event.EventName }}</span>
+                      <br>
+                      <span class="time">{{ $event.EventStart.Format "15:04" }}</span> 
+                      <span class="time">{{ $event.EventEnd.Format "15:04" }}</span>
+                  </div>
+              {{ end }}
           </td>
+          {{ else }}
+          <td
+          class="p-1 border cursor-pointer duration-500 ease h-40 lg:w-30 md:w-30 overflow-auto sm:w-20 transition w-10 xl:w-40"
+      >
+          {{ range $event := $day.DayEvents }}
+              <div
+                  class="event bg-purple-400 text-white rounded p-1 text-sm mb-1"
+              >
+                  <span class="event-name">{{ $event.EventName }}</span>
+                  <br>
+                  <span class="time">{{ $event.EventStart.Format "15:04" }}</span> 
+                  <span class="time">{{ $event.EventEnd.Format "15:04" }}</span>
+              </div>
           {{ end }}
+      </td>
+          {{ end }}
+      {{ end }}
+      
         </tr>
       </tbody>
     </table>

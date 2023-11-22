@@ -67,6 +67,7 @@ type Day struct {
 	DayDate   time.Time
 	DayEvents []Event
 	Empty     bool
+	CDG57     bool
 }
 
 // Create an event struct to store the event data

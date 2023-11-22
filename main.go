@@ -67,6 +67,8 @@ func main() {
 		})
 	})
 
+	app.Get("/romain", handler.GetHandleRomain)
+
 	log.Panicln(app.Listen(PORT))
 
 }

@@ -5,6 +5,7 @@ import (
 	"calendar/internals/models"
 	"fmt"
 	"log"
+	"math"
 	"strings"
 	"time"
 
@@ -33,13 +34,24 @@ func GetHandleMonth(c *fiber.Ctx) (err error) {
 	currentYear := time.Now().In(ParisLocation).Year()
 	currentMonth := time.Now().In(ParisLocation).Month()
 
+	log.Println(currentMonth)
+
 	year := c.Query("year")
 
 	month := c.Query("month")
 
+	monthInt := int(currentMonth)
+	var formattedMonth string
+	if math.Abs(float64(monthInt)) < 10 {
+		// append a 0 before the int
+		formattedMonth = fmt.Sprintf("0%d", monthInt)
+	} else {
+		formattedMonth = fmt.Sprintf("%d", monthInt)
+	}
+	log.Println(formattedMonth)
 	// if the query is empty, redirect to the current month and year
 	if year == "" || month == "" {
-		return c.Redirect(fmt.Sprintf("/month?formation=%s&year=%d&month=%d", formation, currentYear, int(currentMonth)))
+		return c.Redirect(fmt.Sprintf("/month?formation=%s&year=%d&month=%s", formation, currentYear, formattedMonth))
 	}
 
 	// log.Println(formation, year, month)
@@ -50,7 +62,7 @@ func GetHandleMonth(c *fiber.Ctx) (err error) {
 		return c.SendString(err.Error())
 	}
 
-	log.Println(MonthTime)
+	log.Println(MonthTime, int(MonthTime.Month()))
 	Weeks := GenerateWeek(MonthTime.Year(), int(MonthTime.Month()), formation)
 
 	// return c.SendString("ok")

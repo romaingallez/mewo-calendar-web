@@ -77,10 +77,10 @@ func GetHandleRomain(c *fiber.Ctx) (err error) {
 // Function to generate a []models.Week struct for each week in the month
 func GenerateWeekCDG(year int, month int, formation string) (Weeks []models.Week) {
 
-	ParisLocation, err := time.LoadLocation("Europe/Paris")
-	if err != nil {
-		log.Println(err)
-	}
+	// ParisLocation, err := time.LoadLocation("Europe/Paris")
+	// if err != nil {
+	// 	log.Println(err)
+	// }
 
 	// get the first day of the month
 	firstDay := time.Date(year, time.Month(month), 1, 0, 0, 0, 0, time.UTC)
@@ -203,30 +203,30 @@ func GenerateWeekCDG(year int, month int, formation string) (Weeks []models.Week
 
 	}
 
-	var CDGWEEKS []models.Week
+	// var CDGWEEKS []models.Week
 
-	for i, week := range Weeks {
-		for j, day := range week.Days {
-			// if there is no event in the day add event CDG57 to the day
-			if len(day.DayEvents) == 0 {
-				// eventCDG from 7:45 to 17:30
-				eventCDG57 := models.Event{
-					EventName:  "CDG57",
-					EventStart: time.Date(day.DayDate.Year(), day.DayDate.Month(), day.DayDate.Day(), 7, 45, 0, 0, ParisLocation),
-					EventEnd:   time.Date(day.DayDate.Year(), day.DayDate.Month(), day.DayDate.Day(), 17, 45, 0, 0, ParisLocation),
-					EventLink:  "https://cdg57.fr/",
-				}
-				day.DayEvents = append(day.DayEvents, eventCDG57)
-				day.CDG57 = true
-			}
+	// for i, week := range Weeks {
+	// 	for j, day := range week.Days {
+	// 		// if there is no event in the day add event CDG57 to the day
+	// 		if len(day.DayEvents) == 0 {
+	// 			// eventCDG from 7:45 to 17:30
+	// 			eventCDG57 := models.Event{
+	// 				EventName:  "CDG57",
+	// 				EventStart: time.Date(day.DayDate.Year(), day.DayDate.Month(), day.DayDate.Day(), 7, 45, 0, 0, ParisLocation),
+	// 				EventEnd:   time.Date(day.DayDate.Year(), day.DayDate.Month(), day.DayDate.Day(), 17, 45, 0, 0, ParisLocation),
+	// 				EventLink:  "https://cdg57.fr/",
+	// 			}
+	// 			day.DayEvents = append(day.DayEvents, eventCDG57)
+	// 			// day.CDG57 = true
+	// 		}
 
-			Weeks[i].Days[j] = day
+	// 		Weeks[i].Days[j] = day
 
-		}
-		CDGWEEKS = append(CDGWEEKS, week)
-	}
+	// 	}
+	// 	CDGWEEKS = append(CDGWEEKS, week)
+	// }
 
 	// print the last week day with each day
 
-	return CDGWEEKS
+	return Weeks
 }

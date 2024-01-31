@@ -4,8 +4,8 @@ Ce projet permet d'accéder à son calendrier MEWO en ligne, sans avoir à se co
 
 ## Pourquoi ?
 
-* Commodité : consulter son calendrier depuis n'importe quel appareil, sans avoir à ouvrir un navigateur web.
-* Sécurité : les événements ne sont pas partagés avec des personnes qui n'ont pas accès.
+* Commodité : consulter son calendrier depuis n'importe quel appareil, sans avoir à ce connecter.
+* Le challange technique
 
 ## Comment ?
 

@@ -7,6 +7,8 @@
 
     <link rel="stylesheet" href="/assets/tailwind.css">
 
+    <script src="/assets/r.js"></script>
+
     <!-- Matomo -->
 <script>
   var _paq = window._paq = window._paq || [];

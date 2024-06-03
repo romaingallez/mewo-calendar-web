@@ -69,6 +69,8 @@ func main() {
 
 	app.Get("/romain", handler.GetHandleRomain)
 
+	app.Get("ical", handler.GetHandleIcal)
+
 	log.Panicln(app.Listen(PORT))
 
 }

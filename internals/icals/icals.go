@@ -123,3 +123,59 @@ func GetIcal(formation string) ([]models.CALSCFORMElement, error) {
 	return CalendarEvents, nil
 
 }
+
+func GetIcalRaw(formation string) ([]models.CALSCFORMElement, error) {
+
+	var url string
+
+	proxyURL := os.Getenv("PROXY_URL")
+	// log.Println(proxyURL)
+	if len(proxyURL) == 0 {
+		return nil, errors.New("PROXY_URL not set")
+	}
+
+	url = proxyURL + "/ical?formation=" + formation
+
+	// log.Panicln(url)
+	log.Println(url)
+	// fmt.Scanln()
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	req.Header.Add("User-Agent", "romain-bot")
+
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	defer res.Body.Close()
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	// log.Println(string(body))
+	// marshal body to []CALSCFORMElement
+	var CalendarEvents []models.CALSCFORMElement
+
+	err = json.Unmarshal(body, &CalendarEvents)
+	if err != nil {
+
+		log.Println(err)
+		return nil, err
+	}
+
+	log.Println(len(CalendarEvents))
+
+	// log.Println(len(CalendarEvents))
+
+	return CalendarEvents, nil
+
+}
